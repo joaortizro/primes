@@ -7,7 +7,8 @@
 using namespace std;
 
 int main(int argc, char **argv){
-    ifstream checkfile("../cuda/cudaSieveList.txt");
+    //ifstream checkfile("../cuda/cudaSieveList.txt");
+    ifstream checkfile("../mpi/mpiSieveList.txt");
     unordered_set<string> primes;
     string line;
     for(int i=1;i<=n;i++){
