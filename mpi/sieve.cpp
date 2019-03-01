@@ -49,7 +49,7 @@ int main(int argc, char **argv ) {
                 0,
                 MPI_COMM_WORLD);
     MPI_Bcast(&limit,1,MPI_LONG_LONG,0,MPI_COMM_WORLD);
-    printf("rank %d low %llu high %llu \n",rank,low,high);
+    //printf("rank %d low %llu high %llu \n",rank,low,high);
     for(ULL p=2;p<=limit;p++){
         for(ULL multiple=2*p; multiple<high; multiple+=p){
             if(multiple>=low) sub_list[multiple % elements_per_block]=1; 
@@ -58,7 +58,6 @@ int main(int argc, char **argv ) {
 
     for(ULL i =0;i<elements_per_block;i++){
         if(sub_list[i]!=1){
-            //if (rank==3) printf("rank %d , prime %llu \n",rank,sub_list[i]);
             local_primes.push_back(sub_list[i]);
         }
     } 
