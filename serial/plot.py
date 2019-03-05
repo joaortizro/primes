@@ -12,6 +12,7 @@ dataBrute= np.asarray(linesBrute[2:])
 
 average={}
 averageBrute={}
+
 for s in range(len(size)):
     sum = 0.0 
     sumBrute = 0.0
@@ -20,6 +21,8 @@ for s in range(len(size)):
         sumBrute = sumBrute + int(dataBrute[(r)+(runs*s)])
     average[size[s]]=sum/runs
     averageBrute[size[s]]=sumBrute/runs
+
+print average
 
 plt.plot(average.keys(),average.values(),'ro')
 plt.plot(averageBrute.keys(),averageBrute.values(),'b+')

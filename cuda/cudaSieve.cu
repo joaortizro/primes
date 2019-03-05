@@ -12,12 +12,12 @@ ofstream timeresult;
 
 __global__ void cuda_erastothenes_sieve (ULL *marked, ULL *limit, ULL *n, int *totalThreads) {
     int index = blockIdx.x * blockDim.x + threadIdx.x;
-    //printf("block %d, thread %d \n", blockIdx.x, threadIdx.x);
     //printf("index %d,limit %llu , n %llu , totalThreads %d \n",index, *limit , *n , *totalThreads);
+    //printf("block %d, thread %d \n", blockIdx.x, threadIdx.x);
     marked[0]=1;
     marked[1]=1;
     index=index+2;
-    if(*totalThreads>*n){
+    if(*totalThreads>*n || index >*limit){
         return ;
     }else if(*totalThreads ==1){
         for(ULL p=2;p<=*limit;p++){
@@ -27,8 +27,10 @@ __global__ void cuda_erastothenes_sieve (ULL *marked, ULL *limit, ULL *n, int *t
         }
     }
     else{
+        //printf("index %d,limit %llu , n %llu , totalThreads %d \n",index, *limit , *n , *totalThreads);
         for(ULL p=index;p<=*limit;p+=*totalThreads){
-                //printf("p %llu \n",p);
+                if(marked[p]==1 || p%2==0 && p>2) return;
+                //printf("index %d , p%llu \n",index,p);
                 for(ULL multiple=2*p; multiple<*n; multiple+=p){
                     //printf("multiple %llu \n",multiple);
                     marked[multiple]=1;
@@ -43,9 +45,10 @@ int main(int argc, char **argv){
     ULL size;
     ULL *list,*d_list,limit,*d_limit,*d_n,n;
     n=atoi(argv[1]);
-    int blocks=atoi(argv[2]);
-    int thread_per_block=atoi(argv[3]);
-    int totalThreads = blocks*thread_per_block;
+    int threads=atoi(argv[2]);
+    //int thread_per_block=atoi(argv[3]);
+    int blocks= floor(n/threads);
+    int totalThreads = threads;
     int *d_totalThreads; 
     primeresult.open("cudaSieveList.txt");
     timeresult.open("cudaSieveResult.txt",ios::out | ios::app );
@@ -71,12 +74,13 @@ int main(int argc, char **argv){
 
 
     auto begin= std::chrono::high_resolution_clock::now();
-    cuda_erastothenes_sieve<<<blocks,thread_per_block>>>(d_list,d_limit,d_n,d_totalThreads);
+    cuda_erastothenes_sieve<<<blocks,threads>>>(d_list,d_limit,d_n,d_totalThreads);
     auto end = std::chrono::high_resolution_clock::now();
 
     auto duration = duration_cast<std::chrono::microseconds>(end - begin);
     
-    
+    timeresult<<duration.count()<<endl;
+
     cudaMemcpy(list,d_list, size, cudaMemcpyDeviceToHost);
 
     cudaDeviceSynchronize();
@@ -98,7 +102,7 @@ int main(int argc, char **argv){
     } 
 
 
-    timeresult<<duration.count()<<endl;
+    
     //cout<<duration.count()<<endl;
 
     free(list);

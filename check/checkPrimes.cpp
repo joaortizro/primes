@@ -7,12 +7,13 @@
 using namespace std;
 
 int main(int argc, char **argv){
-    //ifstream checkfile("../cuda/cudaSieveList.txt");
+
     string path;
     path=argv[1];
     //cout<< path<<endl;
-    ifstream checkfile("../omp/sieveList.txt");
-    //ifstream checkfile(path);
+    //ifstream checkfile("../omp/sieveList.txt");
+    //ifstream checkfile("../cuda/cudaSieveList.txt");
+    ifstream checkfile(path);
     unordered_set<string> primes;
     string line;
     for(int i=1;i<=n;i++){

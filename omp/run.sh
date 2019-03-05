@@ -10,7 +10,7 @@ rm -r images/
 mkdir images
 
 g++ omp-sieve.cpp -o ompsieve -fopenmp
-#g++ omp-bruteForce.cpp -o ompbrute -fopenmp
+g++ omp-bruteForce.cpp -o ompbrute -fopenmp
 
 echo ${size[*]} >>sieveResult.txt
 echo ${th[*]} >>sieveResult.txt
@@ -24,7 +24,7 @@ do
             do
                 echo "N" $s "Threads=" $t "run" $r
                 ./ompsieve $s $t 
-                #./ompbrute $s $t
+                ./ompbrute $s $t
             done
     done
 done

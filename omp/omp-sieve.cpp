@@ -31,7 +31,7 @@ int main(int argc, char const *argv[]){
         marked[i]=false;
     }
 
-    #pragma omp parallel num_threads(threads) schedule(dynamic) //shared(marked) private(p,multiple)
+/*     #pragma omp parallel num_threads(threads) //schedule(dynamic) //shared(marked) private(p,multiple)
     {
         #pragma omp for
         for(p=2;p<=limit;p++){
@@ -39,8 +39,18 @@ int main(int argc, char const *argv[]){
                 marked[multiple]=true;
             }    
         }
+    } */
+    for(p=2;p<=limit;p++){
+            #pragma omp parallel num_threads(threads)
+            {
+                #pragma omp for
+                for(multiple=2*p; multiple<n; multiple+=p){
+                    marked[multiple]=true;
+                }
+            }
+    
     }
-
+    
 
     //#pragma omp parallel for num_threads(threads) shared(marked)
     for(int j=2;j<n;j++){

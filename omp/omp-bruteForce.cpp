@@ -35,12 +35,11 @@ int main(int argc, char const *argv[]){
     auto beginParallelBrute = std::chrono::high_resolution_clock::now();
     
     int i,j;
-    #pragma omp parallel 
+    #pragma omp parallel num_threads(threads)
     {
         #pragma omp for
         for(int i=2;i<n;i++){
             if(isPrime(i)) {
-                #pragma omp critical
                 primeresult<< i <<endl;
             }
         }

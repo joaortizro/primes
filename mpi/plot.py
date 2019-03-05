@@ -9,7 +9,6 @@ size    = np.asarray(lines[0].split(" "));
 threads = np.asarray(lines[1].split(" "));
 data    =  np.asarray(lines[2:]);
 
-print data
 
 times=collections.OrderedDict()
 for s in range(len(size)):
@@ -23,6 +22,8 @@ for s in range(len(size)):
     y=times[size[s]].values()
     plt.plot(x,y,marker='o',linestyle='--')
     plt.legend()
+    plt.ylabel("Tiempo");
+    plt.xlabel("Hilos");
     plt.title("N="+size[s])
     plt.savefig("images/"+str(size[s])+".png")
 
